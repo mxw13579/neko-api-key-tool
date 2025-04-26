@@ -146,7 +146,7 @@ const LogsTable = () => {
                 Toast.success('已复制：' + text);
                 return;
             }
-            
+
             // Fallback for Safari and older browsers
             const textArea = document.createElement('textarea');
             textArea.value = text;
@@ -156,7 +156,7 @@ const LogsTable = () => {
             document.body.appendChild(textArea);
             textArea.focus();
             textArea.select();
-            
+
             try {
                 document.execCommand('copy');
                 textArea.remove();
@@ -332,10 +332,10 @@ const LogsTable = () => {
         e.stopPropagation();
         const activeTabData = tabData[activeTabKey] || {};
         const { balance, usage, accessdate } = activeTabData;
-        const info = `令牌总额: ${balance === 100000000 ? '无限' : `${balance.toFixed(3)}`}
-剩余额度: ${balance === 100000000 ? '无限制' : `${(balance - usage).toFixed(3)}`}
-已用额度: ${balance === 100000000 ? '不进行计算' : `${usage.toFixed(3)}`}
-有效期至: ${accessdate === 0 ? '永不过期' : renderTimestamp(accessdate)}`;
+        const info = `令牌当日总额: ${balance === 100000000 ? '无限' : `${balance.toFixed(3)}`}
+当日剩余额度: ${balance === 100000000 ? '无限制' : `${(balance - usage).toFixed(3)}`}
+总计已用额度: ${balance === 100000000 ? '不进行计算' : `${usage.toFixed(3)}`}
+有效期至: ${accessdate === 0 ? '未激活' : renderTimestamp(accessdate)}`;
         copyText(info);
     };
 
@@ -353,20 +353,20 @@ const LogsTable = () => {
             '详情': log.content,
         }));
         const csvString = '\ufeff' + Papa.unparse(csvData);
-        
+
         try {
             const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8' });
             const url = URL.createObjectURL(blob);
             const link = document.createElement('a');
             link.href = url;
             link.download = 'data.csv';
-            
+
             // For Safari compatibility
             if (navigator.userAgent.indexOf('Safari') > -1 && navigator.userAgent.indexOf('Chrome') === -1) {
                 link.target = '_blank';
                 link.setAttribute('target', '_blank');
             }
-            
+
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
@@ -421,19 +421,19 @@ const LogsTable = () => {
                             <Spin spinning={loading}>
                                 <div style={{ marginBottom: 16 }}>
                                     <Text type="secondary">
-                                        令牌总额：{activeTabData.balance === 100000000 ? "无限" : activeTabData.balance === "未知" || activeTabData.balance === undefined ? "未知" : `${activeTabData.balance.toFixed(3)}`}
+                                        令牌当日总额：{activeTabData.balance === 100000000 ? "无限" : activeTabData.balance === "未知" || activeTabData.balance === undefined ? "未知" : `${activeTabData.balance.toFixed(3)}`}
                                     </Text>
                                     <br /><br />
                                     <Text type="secondary">
-                                        剩余额度：{activeTabData.balance === 100000000 ? "无限制" : activeTabData.balance === "未知" || activeTabData.usage === "未知" || activeTabData.balance === undefined || activeTabData.usage === undefined ? "未知" : `${(activeTabData.balance - activeTabData.usage).toFixed(3)}`}
+                                        当日剩余额度：{activeTabData.balance === 100000000 ? "无限制" : activeTabData.balance === "未知" || activeTabData.usage === "未知" || activeTabData.balance === undefined || activeTabData.usage === undefined ? "未知" : `${(activeTabData.balance - activeTabData.usage).toFixed(3)}`}
                                     </Text>
                                     <br /><br />
                                     <Text type="secondary">
-                                        已用额度：{activeTabData.balance === 100000000 ? "不进行计算" : activeTabData.usage === "未知" || activeTabData.usage === undefined ? "未知" : `${activeTabData.usage.toFixed(3)}`}
+                                        总计已用额度：{activeTabData.balance === 100000000 ? "不进行计算" : activeTabData.usage === "未知" || activeTabData.usage === undefined ? "未知" : `${activeTabData.usage.toFixed(3)}`}
                                     </Text>
                                     <br /><br />
                                     <Text type="secondary">
-                                        有效期至：{activeTabData.accessdate === 0 ? '永不过期' : activeTabData.accessdate === "未知" ? '未知' : renderTimestamp(activeTabData.accessdate)}
+                                        有效期至：{activeTabData.accessdate === 0 ? '暂未激活' : activeTabData.accessdate === "未知" ? '未知' : renderTimestamp(activeTabData.accessdate)}
                                     </Text>
                                 </div>
                             </Spin>
