@@ -93,6 +93,7 @@ const LogsTable = () => {
                 const subscriptionData = subscription.data;
                 newTabData.balance = subscriptionData.hard_limit_usd;
                 newTabData.tokenValid = true;
+                newTabData.accessdate = subscriptionData.access_until;
 
                 let now = new Date();
                 let start = new Date(now.getTime() - 100 * 24 * 3600 * 1000);
