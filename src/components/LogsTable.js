@@ -385,7 +385,7 @@ const LogsTable = () => {
         }
     };
 
-    const activeTabData = tabData[activeTabKey] || { logs: [], balance: 0, usage: 0, accessdate: "未知", tokenValid: false };
+    const activeTabData = tabData[activeTabKey] || { logs: [], balance: 0, usage: 0,remainQuota:0, accessdate: "未知", tokenValid: false };
 
     const renderContent = () => (
         <>
@@ -433,7 +433,7 @@ const LogsTable = () => {
                                     </Text>
                                     <br /><br />
                                     <Text type="secondary">
-                                        当日剩余额度：{activeTabData.balance === 100000000 ? "无限制" : activeTabData.balance === "未知" || activeTabData.usage === "未知" || activeTabData.balance === undefined || activeTabData.usage === undefined ? "未知" : `${(activeTabData.balance - activeTabData.usage).toFixed(3)}`}
+                                        当日剩余额度：{activeTabData.balance === 100000000 ? "无限制" : activeTabData.balance === "未知" || activeTabData.usage === "未知" || activeTabData.balance === undefined || activeTabData.usage === undefined ? "未知" : `${(remainQuota).toFixed(3)}`}
                                     </Text>
                                     <br /><br />
                                     <Text type="secondary">
