@@ -64,6 +64,8 @@ const LogsTable = () => {
             [key]: {
                 balance: 0,
                 usage: 0,
+                remainQuota: 0,
+                usedQuota: 0,
                 accessdate: "未知",
                 logs: [],
                 tokenValid: false,
@@ -82,7 +84,7 @@ const LogsTable = () => {
             return;
         }
         setLoading(true);
-        let newTabData = { ...tabData[activeTabKey], balance: 0, usage: 0, accessdate: 0, logs: [], tokenValid: false };
+        let newTabData = { ...tabData[activeTabKey], balance: 0, usage: 0, accessdate: 0, remainQuota: 0,usedQuota: 0, logs: [], tokenValid: false };
 
         try {
 
@@ -91,7 +93,12 @@ const LogsTable = () => {
                     headers: { Authorization: `Bearer ${apikey}` },
                 });
                 const subscriptionData = subscription.data;
+                //当日总额度
                 newTabData.balance = subscriptionData.hard_limit_usd;
+                //当日剩余
+                newTabData.remainQuota = subscriptionData.remain_quota;
+                //已用
+                newTabData.usedQuota = subscriptionData.used_quota;
                 newTabData.tokenValid = true;
                 newTabData.accessdate = subscriptionData.access_until;
 
@@ -332,9 +339,9 @@ const LogsTable = () => {
     const copyTokenInfo = (e) => {
         e.stopPropagation();
         const activeTabData = tabData[activeTabKey] || {};
-        const { balance, usage, accessdate } = activeTabData;
+        const { balance, usage,remainQuota,usedQuota, accessdate } = activeTabData;
         const info = `令牌当日总额: ${balance === 100000000 ? '无限' : `${balance.toFixed(3)}`}
-当日剩余额度: ${balance === 100000000 ? '无限制' : `${(balance - usage).toFixed(3)}`}
+当日剩余额度: ${balance === 100000000 ? '无限制' : `${remainQuota.toFixed(3)}`}
 总计已用额度: ${balance === 100000000 ? '不进行计算' : `${usage.toFixed(3)}`}
 有效期至: ${accessdate === 0 ? '未激活' : renderTimestamp(accessdate)}`;
         copyText(info);
